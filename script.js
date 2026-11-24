@@ -40,7 +40,7 @@ function renderCases(filter = 'all') {
 function renderVideos() {
   videoGrid.innerHTML = videos.map((item) => `
     <article class="video-card">
-      <video controls playsinline preload="metadata" poster="${item.poster}" aria-label="${item.title}">
+      <video autoplay muted loop controls playsinline preload="metadata" poster="${item.poster}" aria-label="${item.title}">
         <source src="${item.src}" type="video/mp4" />
         Shfletuesi juaj nuk e mbështet videon.
       </video>
