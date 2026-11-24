@@ -25,6 +25,26 @@ const videos = [
 const gallery = document.querySelector('#gallery-grid');
 const videoGrid = document.querySelector('#video-grid');
 const dialog = document.querySelector('#image-dialog');
+const reduceMotionPreference = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const revealSelector = '.section-heading, .service-card, .case-card, .video-heading, .video-card, .about-photo-wrap, .about-copy, .team-photo, .doctor-card, .article-card, .review-card, .contact-copy, .booking-card';
+const revealObserver = 'IntersectionObserver' in window && !reduceMotionPreference
+  ? new IntersectionObserver((entries, observer) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -50px 0px' })
+  : null;
+
+function observeReveals(root = document) {
+  if (!revealObserver) return;
+  root.querySelectorAll(`${revealSelector}:not(.reveal)`).forEach((element) => {
+    element.classList.add('reveal');
+    revealObserver.observe(element);
+  });
+}
 
 function renderCases(filter = 'all') {
   const filtered = filter === 'all' ? cases : cases.filter((item) => item.filter === filter);
@@ -35,21 +55,27 @@ function renderCases(filter = 'all') {
       </button>
       <div class="case-meta"><span class="case-category">${item.category}</span><h3>${item.title}</h3></div>
     </article>`).join('');
+  observeReveals(gallery);
 }
 
 function renderVideos() {
   videoGrid.innerHTML = videos.map((item) => `
     <article class="video-card">
-      <video autoplay muted loop controls playsinline preload="metadata" poster="${item.poster}" aria-label="${item.title}">
+      <video autoplay muted loop playsinline preload="auto" aria-hidden="true" tabindex="-1" poster="${item.poster}">
         <source src="${item.src}" type="video/mp4" />
         Shfletuesi juaj nuk e mbështet videon.
       </video>
-      <div class="video-title">${item.title}<span aria-hidden="true">↗</span></div>
+      <div class="video-title">${item.title}<span aria-hidden="true">↗︎</span></div>
     </article>`).join('');
+  videoGrid.querySelectorAll('video').forEach((video) => {
+    video.muted = true;
+    video.play().catch(() => {});
+  });
 }
 
 renderCases();
 renderVideos();
+observeReveals();
 
 document.querySelector('.gallery-filters').addEventListener('click', (event) => {
   const button = event.target.closest('[data-filter]');
