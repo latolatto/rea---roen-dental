@@ -616,3 +616,50 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   font-style: normal;
   font-weight: 400;
 }
+
+/* Fixed quick-contact strip above the main navigation. */
+:root { --utility-height: 38px; }
+body { padding-top: var(--utility-height); }
+html { scroll-padding-top: calc(94px + var(--utility-height)); }
+.utility-bar {
+  position: fixed;
+  z-index: 60;
+  top: 0;
+  right: 0;
+  left: 0;
+  display: flex;
+  height: var(--utility-height);
+  align-items: center;
+  justify-content: flex-end;
+  gap: 22px;
+  padding-inline: max(calc((100vw - var(--max)) / 2), 32px);
+  background: #101d31;
+  color: #f7f6f2;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: .025em;
+}
+.utility-link { display: inline-flex; min-height: 24px; align-items: center; gap: 7px; white-space: nowrap; transition: color .2s ease; }
+.utility-link:hover { color: #e5d2a2; }
+.utility-link + .utility-link { padding-left: 18px; border-left: 1px solid #ffffff24; }
+.utility-link svg { width: 15px; height: 15px; flex: 0 0 auto; fill: none; stroke: #e5d2a2; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.65; }
+.utility-link .utility-icon-dot { fill: #e5d2a2; stroke: none; }
+.utility-google-icon { display: inline-block; background: conic-gradient(from -42deg, #4285f4 0 26%, #34a853 26% 51%, #fbbc05 51% 76%, #ea4335 76%); background-clip: text; color: transparent; font-family: Arial, sans-serif; font-size: 17px; font-weight: 700; line-height: 1; -webkit-background-clip: text; }
+.site-header { top: var(--utility-height); }
+@media (max-width: 720px) {
+  :root { --utility-height: 34px; }
+  html { scroll-padding-top: 108px; }
+  .utility-bar { justify-content: space-around; gap: 8px; padding-inline: 12px; font-size: 9px; }
+  .utility-link { gap: 5px; }
+  .utility-link + .utility-link { padding-left: 9px; }
+  .utility-link svg { width: 14px; height: 14px; }
+  .utility-google-icon { font-size: 16px; }
+  .utility-compact-label { display: none; }
+  .site-header { top: var(--utility-height); }
+}
+@media (max-width: 380px) {
+  .utility-bar { gap: 5px; padding-inline: 8px; font-size: 8px; }
+  .utility-link { gap: 4px; }
+  .utility-link + .utility-link { padding-left: 6px; }
+}
+.doctor-photo { width: 42px; height: 42px; flex: 0 0 42px; border: 1px solid #d6c28d; border-radius: 50%; object-fit: cover; object-position: center; }
